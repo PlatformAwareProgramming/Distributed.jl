@@ -642,7 +642,8 @@ function connect(manager::ClusterManager, pid::Int, config::WorkerConfig)
             release(sem)
         end
     else
-        (s, bind_addr) = connect_to_worker(#=bind_addr=# pubhost, port)
+#        (s, bind_addr) = connect_to_worker(#=bind_addr=# pubhost, port)
+        (s, bind_addr) = connect_to_worker(bind_addr, port)
     end
 
     config.bind_addr = bind_addr

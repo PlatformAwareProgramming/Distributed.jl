@@ -46,7 +46,7 @@ julia> fetch(f)
 function check_args_2(args...)
     na = length(args)
     if na==1
-        role = :(role = :default)
+        role = Expr(:kw, :role, :(:defaut)) #:(role = :default)
         expr = args[1]
     elseif na==2 
         role = args[1]
@@ -107,7 +107,7 @@ julia> fetch(f)
 function check_args_3a(args...)
     na = length(args)
     if na==2
-        role = :(role = :default)
+        role = Expr(:kw, :role, :(:defaut)) #:(role = :default)
         p = args[1]
         expr = args[2]
     elseif na==3 
@@ -123,7 +123,7 @@ end
 macro spawnat(args...)
    rolearg, p, expr = check_args_3a(args...)
 
-    #@info rolearg, typeof(rolearg)
+   #@info rolearg, typeof(rolearg)
 
    thunk = esc(:(()->($expr)))
    var = esc(Base.sync_varname)
@@ -132,7 +132,7 @@ macro spawnat(args...)
    else
        spawncall = :(spawnat($(esc(p)), $thunk; $(esc(rolearg))))
    end
-    quote
+   quote
         local ref = $spawncall
         if $(Expr(:islocal, var))
             put!($var, ref)
@@ -247,7 +247,7 @@ function check_args_3b(args...)
 
     na = length(args)
     if na==1
-        rolearg = :(role = :default)
+        rolearg = Expr(:kw, :role, :(:defaut)) #:(role = :default)
         reducer = nothing
         loop = args[1]
     elseif na==2
@@ -256,7 +256,7 @@ function check_args_3b(args...)
             reducer = nothing
             loop = args[2]
         else
-            rolearg = :(role = :default)
+            rolearg = Expr(:kw, :role, :(:defaut)) #:(role = :default)
             reducer = args[1]
             loop = args[2]
         end
